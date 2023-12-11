@@ -25,9 +25,15 @@ public class MyArma : MonoBehaviour
             _misArmas.Enqueue(other.GetComponentInChildren<arma>().id);
             Debug.Log("armas guardadas" + _misArmas.capacity);
             Destroy(other.gameObject);
+            other.isTrigger = false;
         }
     }
 
+    IEnumerator ActivarArmar()
+    {
+        
+        yield return new WaitForSecondsRealtime(0.2f);
+    }
     public class Queue<T>
     {
         public class Node

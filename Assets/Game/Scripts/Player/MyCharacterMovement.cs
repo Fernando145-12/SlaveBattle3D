@@ -2,15 +2,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using Cinemachine;
 public class MyCharacterMovement : MonoBehaviour
 {
     public GameObject aim;
     public float velocity;
     public Rigidbody rgb;
+    public CinemachineVirtualCamera miCamara;
     private bool miro;
     private Vector3 punteroMouse;
     private MyArma _myarma;
+
     private void Awake()
     {
         _myarma = GetComponent<MyArma>();
@@ -28,6 +30,7 @@ public class MyCharacterMovement : MonoBehaviour
             Vector2 tmp = value.ReadValue<Vector2>();
             Debug.Log(value);
             rgb.velocity = new Vector3(tmp.x,transform.position.y,tmp.y)*velocity;
+            transform.LookAt(new Vector3(transform.position.x + tmp.x, transform.position.y, transform.position.z+tmp.y));
         }
         else
         {
@@ -60,22 +63,15 @@ public class MyCharacterMovement : MonoBehaviour
         if (value.performed)
         {
             miro = true;
-            Vector3 tmp = new Vector3(value.ReadValue<Vector2>().x, Camera.main.transform.position.y, value.ReadValue<Vector2>().y);
-            punteroMouse = Camera.main.ScreenToWorldPoint(tmp);
+            Vector2 tmp = value.ReadValue<Vector2>();
+            //Debug.Log(tmp) ;
+            //punteroMouse = new Vector3( transform.position.x- tmp.x , transform.position.y, transform.position.z - tmp.y);
+            punteroMouse = new Vector3( tmp.x, transform.position.y,tmp.y);
+
         }
     }
     private void Update()
     {
-        if (miro)
-        {
-            Vector3 tmp =  punteroMouse ;
-            float anguloRadianes = Mathf.Atan2(tmp.z - transform.position.z, tmp.x - transform.position.x);
-            float anguloGrados = (180 / Mathf.PI) * anguloRadianes+ 90;
-            //Debug.Log("tmp.z "+tmp.z);
-            //Debug.Log("transform.position.z "+transform.position.z);
-            //Debug.Log("tmp.x " + tmp.x);
-            //Debug.Log("transform.position.x " + transform.position.x);
-            transform.rotation = Quaternion.Euler(0, anguloGrados, 0);
-        }
+        //transform.LookAt(punteroMouse);
     }
 }

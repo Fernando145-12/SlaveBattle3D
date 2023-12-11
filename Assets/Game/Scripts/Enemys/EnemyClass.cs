@@ -4,15 +4,23 @@ using UnityEngine;
 
 public class EnemyClass : Stats
 {
-    // Start is called before the first frame update
+    public int levelEnemy;
+    public Transform _objetivo;
     void Start()
     {
-        
+        _vida = 10;
+        _daño = 1;
+        _velocidad = 4;
+        if (levelEnemy > 0)
+        {
+            _vida *= levelEnemy;
+            _daño = levelEnemy;
+            _velocidad = levelEnemy;
+        }
     }
-
-    // Update is called once per frame
-    void Update()
+    public void SetLevelEnemy(int lvl,Transform player)
     {
-        
+        levelEnemy = lvl;
+        _objetivo = player;
     }
 }
