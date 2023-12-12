@@ -8,6 +8,7 @@ public class MyArma : MonoBehaviour
     [SerializeField] public GameObject armaMano;
     public Queue<int> _misArmas;
     public GameObject[] armas;
+    public MyCharacterStats _player;
     void Start()
     {
         _misArmas = new Queue<int>();
@@ -16,24 +17,19 @@ public class MyArma : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+       
     }
     private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.tag == "Arma")
+    {        
+        if (other.gameObject.tag == "Enemy")
         {
-            _misArmas.Enqueue(other.GetComponentInChildren<arma>().id);
-            Debug.Log("armas guardadas" + _misArmas.capacity);
-            Destroy(other.gameObject);
-            other.isTrigger = false;
+            Vector3 direccion = new Vector3(other.transform.position.x - transform.position.x, other.transform.position.y, other.transform.position.z - transform.position.z);
+            other.gameObject.GetComponent<Rigidbody>().velocity = direccion*5;
+            _player._hacerDaño?.Invoke(other.gameObject.GetComponent<EnemyClass>());
         }
     }
+ 
 
-    IEnumerator ActivarArmar()
-    {
-        
-        yield return new WaitForSecondsRealtime(0.2f);
-    }
     public class Queue<T>
     {
         public class Node

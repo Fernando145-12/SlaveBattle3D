@@ -5,7 +5,7 @@ using System;
 public class MyCharacterStats : Stats
 {
 
-    public Action<MyCharacterStats> _hacerDaño;
+    public Action<EnemyClass> _hacerDaño;
     public Action<MyCharacterStats> _attack1;
     public Action<MyCharacterStats> _curar;
     public Action<MyCharacterStats> _recivirDaño;
@@ -21,10 +21,7 @@ public class MyCharacterStats : Stats
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "EnemyArma")
-        {
-
-        }      
+          
     }
 
 }

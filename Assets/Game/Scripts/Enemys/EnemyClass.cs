@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using System;
 public class EnemyClass : Stats
 {
     public int levelEnemy;
     public Transform _objetivo;
+    public Action<MyCharacterStats,float> _hacerDañoAPlayer;
     void Start()
     {
         _vida = 10;
@@ -22,5 +23,14 @@ public class EnemyClass : Stats
     {
         levelEnemy = lvl;
         _objetivo = player;
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Player")
+        {
+            Debug.Log("Deberia Activar Eveneto");
+            _hacerDañoAPlayer?.Invoke(collision.gameObject.GetComponent<MyCharacterStats>(),_daño);
+        }
     }
 }

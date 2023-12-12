@@ -23,24 +23,33 @@ public class EnemyCharacterMovement : MonoBehaviour
     {
         if (_enemyclass.levelEnemy > 0)
         {
-            if (veoPlayer ==true)
+            if (positionNodes!=null)
             {
-                transform.LookAt(_enemyclass._objetivo);
-                Vector3 direccion = new Vector3(_enemyclass._objetivo.position.x - transform.position.x, _enemyclass._objetivo.position.y - transform.position.y, _enemyclass._objetivo.position.z - transform.position.z);
-                rgbEnemy.velocity = direccion.normalized * _enemyclass._velocidad;
-            }
-            else
-            {
-                if (patrullo == true)
+                if (veoPlayer == true)
                 {
-                    transform.LookAt(positionNodes[posActual].transform.position);
-                    Vector3 direccion = new Vector3(positionNodes[posActual].transform.position.x - transform.position.x, positionNodes[posActual].transform.position.y - transform.position.y, positionNodes[posActual].transform.position.z - transform.position.z);
+                    transform.LookAt(_enemyclass._objetivo);
+                    Vector3 direccion = new Vector3(_enemyclass._objetivo.position.x - transform.position.x, _enemyclass._objetivo.position.y - transform.position.y, _enemyclass._objetivo.position.z - transform.position.z);
                     rgbEnemy.velocity = direccion.normalized * _enemyclass._velocidad;
                 }
                 else
                 {
-                    rgbEnemy.velocity = Vector3.zero;
+                    if (patrullo == true)
+                    {
+                        transform.LookAt(positionNodes[posActual].transform.position);
+                        Vector3 direccion = new Vector3(positionNodes[posActual].transform.position.x - transform.position.x, positionNodes[posActual].transform.position.y - transform.position.y, positionNodes[posActual].transform.position.z - transform.position.z);
+                        rgbEnemy.velocity = direccion.normalized * _enemyclass._velocidad;
+                    }
+                    else
+                    {
+                        rgbEnemy.velocity = Vector3.zero;
+                    }
                 }
+            }
+            else
+            {
+                transform.LookAt(_enemyclass._objetivo);
+                Vector3 direccion = new Vector3(_enemyclass._objetivo.position.x - transform.position.x, _enemyclass._objetivo.position.y - transform.position.y, _enemyclass._objetivo.position.z - transform.position.z);
+                rgbEnemy.velocity = direccion.normalized * _enemyclass._velocidad;
             }
         }
         else

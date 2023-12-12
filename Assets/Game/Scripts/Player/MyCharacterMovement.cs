@@ -11,26 +11,20 @@ public class MyCharacterMovement : MonoBehaviour
     public CinemachineVirtualCamera miCamara;
     private bool miro;
     private Vector3 punteroMouse;
-    private MyArma _myarma;
+    public MyArma _myarma;
 
-    private void Awake()
-    {
-        _myarma = GetComponent<MyArma>();
-    }
     private void Start()
     {
-        Debug.Log("Estamos");
     }
- 
+
     public void OnMove(InputAction.CallbackContext value)
     {
-        Debug.Log("OnMove");
         if (value.performed)
         {
             Vector2 tmp = value.ReadValue<Vector2>();
             Debug.Log(value);
-            rgb.velocity = new Vector3(tmp.x,transform.position.y,tmp.y)*velocity;
-            transform.LookAt(new Vector3(transform.position.x + tmp.x, transform.position.y, transform.position.z+tmp.y));
+            rgb.velocity = new Vector3(tmp.x, transform.position.y, tmp.y) * velocity;
+            transform.LookAt(new Vector3(transform.position.x + tmp.x, transform.position.y, transform.position.z + tmp.y));
         }
         else
         {
@@ -41,22 +35,60 @@ public class MyCharacterMovement : MonoBehaviour
     {
         if (value.started)
         {
-            Debug.Log("Attack1");
-
+            if (_myarma._misArmas.capacity <= 0)
+            {
+                _myarma.armaMano.SetActive(false);
+            }
+            else
+            {
+                _myarma.armaMano.SetActive(true);
+            }
+            StartCoroutine(Atacar1());
             Debug.Log("armas guardadas" + _myarma._misArmas.capacity);
         }
-
+    }
+    IEnumerator Atacar1()
+    {
+        _myarma.GetComponent<Collider>().isTrigger = true;
+        _myarma.armaMano.transform.localScale = new Vector3(2.007037f, 1.043961f, 1f);
+        yield return new WaitForSecondsRealtime(0.2f);
+        _myarma.armaMano.transform.localScale = new Vector3(0.1911578f, 0.7326044f, 1f);
+        _myarma.GetComponent<Collider>().isTrigger = false;
     }
     public void Attack2(InputAction.CallbackContext value)
     {
         if (value.started)
         {
-            Debug.Log("Attack2");
+            if (_myarma._misArmas.capacity <= 0)
+            {
+                _myarma.armaMano.SetActive(false);
+            }
+            else
+            {
+                _myarma.armaMano.SetActive(true);
+            }
+            StartCoroutine(Atacar2());
             _myarma._misArmas.Dequeue();
-            _myarma.armaMano.GetComponent<SpriteRenderer>().sprite = _myarma.armas[_myarma._misArmas.Head.value].GetComponent<SpriteRenderer>().sprite;
+            if (_myarma._misArmas.capacity <= 0)
+            {
+                _myarma.armaMano.GetComponent<SpriteRenderer>().sprite = null;
+            }
+            else
+            {
+                _myarma.armaMano.GetComponent<SpriteRenderer>().sprite = _myarma.armas[_myarma._misArmas.Head.value].GetComponent<SpriteRenderer>().sprite;
+            }
+
             Debug.Log("armas guardadas" + _myarma._misArmas.capacity);
 
         }
+    }
+    IEnumerator Atacar2()
+    {
+        _myarma.GetComponent<Collider>().isTrigger = true;
+        _myarma.armaMano.transform.localScale = new Vector3(4.124477f, 2.206971f, 1f);
+        yield return new WaitForSecondsRealtime(0.2f);
+        _myarma.armaMano.transform.localScale = new Vector3(0.1911578f, 0.7326044f, 1f);
+        _myarma.GetComponent<Collider>().isTrigger = false;
     }
     public void Aim(InputAction.CallbackContext value)
     {
@@ -66,12 +98,22 @@ public class MyCharacterMovement : MonoBehaviour
             Vector2 tmp = value.ReadValue<Vector2>();
             //Debug.Log(tmp) ;
             //punteroMouse = new Vector3( transform.position.x- tmp.x , transform.position.y, transform.position.z - tmp.y);
-            punteroMouse = new Vector3( tmp.x, transform.position.y,tmp.y);
+            punteroMouse = new Vector3(tmp.x, transform.position.y, tmp.y);
 
         }
     }
     private void Update()
     {
         //transform.LookAt(punteroMouse);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Arma")
+        {
+            _myarma._misArmas.Enqueue(other.GetComponentInChildren<arma>().id);
+            Debug.Log("armas guardadas" + _myarma._misArmas.capacity);
+            Destroy(other.gameObject);
+        }
     }
 }
