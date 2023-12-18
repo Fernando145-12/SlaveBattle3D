@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 049742df1ea3d8b4796df8878764c8c3, type: 3}
+  m_Name: RankinController
+  m_EditorClassIdentifier: 
+  maxScore:
+  - {fileID: 11400000, guid: bc48033d7115501408a4cf765bdad5e6, type: 2}
+  - {fileID: 11400000, guid: 5176347cd5aee904c940b1a9c72137e0, type: 2}
+  - {fileID: 11400000, guid: 1d03619d433275f45b4bdd2359cb914e, type: 2}
+  - {fileID: 11400000, guid: f25fc005004f58d419cea6a940619203, type: 2}

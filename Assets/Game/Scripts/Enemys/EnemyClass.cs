@@ -29,7 +29,6 @@ public class EnemyClass : Stats
     {
         if (collision.gameObject.tag == "Player")
         {
-            Debug.Log("Deberia Activar Eveneto");
             _hacerDañoAPlayer?.Invoke(collision.gameObject.GetComponent<MyCharacterStats>(),_daño);
         }
     }

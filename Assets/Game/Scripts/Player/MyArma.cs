@@ -26,6 +26,7 @@ public class MyArma : MonoBehaviour
             Vector3 direccion = new Vector3(other.transform.position.x - transform.position.x, other.transform.position.y, other.transform.position.z - transform.position.z);
             other.gameObject.GetComponent<Rigidbody>().velocity = direccion*5;
             _player._hacerDaño?.Invoke(other.gameObject.GetComponent<EnemyClass>());
+            _player.score += 10;
         }
     }
  

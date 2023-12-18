@@ -17,6 +17,7 @@ public class GUIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        score.text = "Score:"+(int)_miplayer.score;
+        life.text = "Life : " + _miplayer._vida;
     }
 }

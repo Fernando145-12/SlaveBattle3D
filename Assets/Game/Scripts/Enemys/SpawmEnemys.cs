@@ -30,7 +30,10 @@ public class SpawmEnemys : MonoBehaviour
         ListaEnemigos.AddOndeStart(tmp.GetComponent<EnemyClass>());
         yield return new WaitForSecondsRealtime(intervaloSpawm);
         Debug.Log(ListaEnemigos.count);
-
+        if (objetivo.transform.position.y > 15)
+        {
+            MiPiso = false;
+        }
         if (MiPiso==true)
         {
             StartCoroutine(Spamear());

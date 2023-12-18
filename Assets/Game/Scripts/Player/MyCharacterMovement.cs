@@ -8,9 +8,10 @@ public class MyCharacterMovement : MonoBehaviour
     public GameObject aim;
     public float velocity;
     public Rigidbody rgb;
+    public Animator animator;
     public CinemachineVirtualCamera miCamara;
     private bool miro;
-    private Vector3 punteroMouse;
+    public Vector3 punteroMouse;
     public MyArma _myarma;
 
     private void Start()
@@ -21,13 +22,15 @@ public class MyCharacterMovement : MonoBehaviour
     {
         if (value.performed)
         {
-            Vector2 tmp = value.ReadValue<Vector2>();
+            Vector2 input = value.ReadValue<Vector2>();
             Debug.Log(value);
-            rgb.velocity = new Vector3(tmp.x, transform.position.y, tmp.y) * velocity;
-            transform.LookAt(new Vector3(transform.position.x + tmp.x, transform.position.y, transform.position.z + tmp.y));
+            rgb.velocity = new Vector3(input.x, transform.position.y, input.y) * velocity;
+            animator.SetFloat("Velocity", input.magnitude);
+            //transform.LookAt(new Vector3(transform.position.x + tmp.x, transform.position.y, transform.position.z + tmp.y));
         }
         else
         {
+            animator.SetFloat("Velocity", 0);
             rgb.velocity = Vector3.zero;
         }
     }
@@ -41,6 +44,7 @@ public class MyCharacterMovement : MonoBehaviour
             }
             else
             {
+                animator.SetTrigger("Attack1");
                 _myarma.armaMano.SetActive(true);
             }
             StartCoroutine(Atacar1());
@@ -65,6 +69,7 @@ public class MyCharacterMovement : MonoBehaviour
             }
             else
             {
+                animator.SetTrigger("Attack2");
                 _myarma.armaMano.SetActive(true);
             }
             StartCoroutine(Atacar2());
@@ -91,20 +96,30 @@ public class MyCharacterMovement : MonoBehaviour
         _myarma.GetComponent<Collider>().isTrigger = false;
     }
     public void Aim(InputAction.CallbackContext value)
-    {
-        if (value.performed)
-        {
+    {       
             miro = true;
-            Vector2 tmp = value.ReadValue<Vector2>();
-            //Debug.Log(tmp) ;
-            //punteroMouse = new Vector3( transform.position.x- tmp.x , transform.position.y, transform.position.z - tmp.y);
-            punteroMouse = new Vector3(tmp.x, transform.position.y, tmp.y);
+            Vector2 input = value.ReadValue<Vector2>();
+            // Calcula la diferencia entre la posición del puntero y la posición del GameObject
+            Vector3 miposicion = new Vector3(transform.position.x, 0f, transform.position.z);
 
-        }
+            Vector3 worldPoint = Camera.main.ScreenToWorldPoint(new Vector3(input.x+ miposicion.x, input.y + miposicion.z, transform.position.y));
+
+            punteroMouse = worldPoint;
+
     }
     private void Update()
     {
-        //transform.LookAt(punteroMouse);
+        transform.LookAt(new Vector3(punteroMouse.x, transform.position.y, punteroMouse.z));
+        aim.gameObject.transform.position = new Vector3(punteroMouse.x, transform.position.y, punteroMouse.z);
+
+        if (_myarma._misArmas.capacity <= 0)
+        {
+            animator.SetBool("Armado", false);
+        }
+        else
+        {
+            animator.SetBool("Armado", true);
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -114,6 +129,10 @@ public class MyCharacterMovement : MonoBehaviour
             _myarma._misArmas.Enqueue(other.GetComponentInChildren<arma>().id);
             Debug.Log("armas guardadas" + _myarma._misArmas.capacity);
             Destroy(other.gameObject);
+        }
+        if (other.gameObject.tag == "Level")
+        {
+            transform.position = new Vector3(0.5f, 21, 26.6f);
         }
     }
 }

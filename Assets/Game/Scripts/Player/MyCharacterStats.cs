@@ -9,6 +9,7 @@ public class MyCharacterStats : Stats
     public Action<MyCharacterStats> _attack1;
     public Action<MyCharacterStats> _curar;
     public Action<MyCharacterStats> _recivirDaño;
+    public float score;
     void Start()
     {
         
